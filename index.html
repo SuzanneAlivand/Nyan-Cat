@@ -1,9 +1,29 @@
 <html>
   <head>
     <title>Nyan Kat</title>
+    <link rel="stylesheet" href="css/styles.css">
   </head>
   <body>
+    <div id="start"><button>start</button></div>
+    <div id="health">
+      <img src="/images/heart.png" alt="" id="heart1">
+      <img src="/images/heart.png" alt="" id="heart2">
+      <img src="/images/heart.png" alt="" id="heart3">
+    </div>
     <div id="app"></div>
+    <audio id="myAudio">
+      <source src="ost/soundtrack.mp3" allow="autoplay" type="audio/mpeg">
+    </audio>
+    <audio id="movement">
+      <source src="ost/movement.wav" type="audio/mpeg">
+    </audio>
+    <audio id="over">
+      <source src="ost/over.wav" type="audio/mpeg">
+    </audio>
+    <audio id="ouch">
+      <source src="ost/ouch.wav" type="audio/mpeg">
+    </audio>
+    <script src="js/text.js"></script>
     <script src="js/data.js"></script>
     <script src="js/Enemy.js"></script>
     <script src="js/engine-utilities.js"></script>

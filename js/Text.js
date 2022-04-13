@@ -11,8 +11,9 @@ class Text {
     div.style.left = xPos;
     div.style.top = yPos;
     div.style.color = 'white';
-    div.style.font = 'bold 30px Impact';
+    div.style.font = '30px Impact';
     div.style.zIndex = 2000;
+    div.style.textAlign = 'center';
 
     root.appendChild(div);
 

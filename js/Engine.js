@@ -16,6 +16,10 @@ class Engine {
     this.enemies = [];
     // We add the background image to the game
     addBackground(this.root);
+          // lives
+          this.lives=3;
+          this.text= new Text(this.root,91,205);
+          this.score=0;
   }
 
   // The gameLoop will run every few milliseconds. It does several things
@@ -23,6 +27,21 @@ class Engine {
   //  - Detects a collision between the player and any enemy
   //  - Removes enemies that are too low from the enemies array
   gameLoop = () => {
+    // audio player
+    this.score++;
+    const ost = document.getElementById("myAudio");
+    const over = document.getElementById("over");
+    const ouch = document.getElementById("ouch");
+
+    function playAudio() {
+      ost.play();
+    }
+
+    function stopAudio() {
+      ost.pause();
+      ost.currentTime = 0;
+    }
+    playAudio();
     // This code is to see how much time, in milliseconds, has elapsed since the last
     // time this method was called.
     // (new Date).getTime() evaluates to the number of milliseconds since January 1st, 1970 at midnight.
@@ -45,7 +64,8 @@ class Engine {
     this.enemies = this.enemies.filter((enemy) => {
       return !enemy.destroyed;
     });
-
+    // console.log(this.player)
+    // console.log(this.enemies)
     // We need to perform the addition of enemies until we have enough enemies.
     while (this.enemies.length < MAX_ENEMIES) {
       // We find the next available spot and, using this spot, we create an enemy.
@@ -57,8 +77,22 @@ class Engine {
     // We check if the player is dead. If he is, we alert the user
     // and return from the method (Why is the return statement important?)
     if (this.isPlayerDead()) {
-      window.alert('Game over');
+      document.getElementById('heart'+this.lives).style.display = 'none';
+      this.lives--;
+      ouch.currentTime = 0;
+      if(this.lives>0){
+        ouch.play();
+      }else{
+      stopAudio();
+      over.play();
+      let highestScore = localStorage.getItem('highest');
+      if(this.score > highestScore){
+        localStorage.setItem("highest", this.score);
+      }
+      let highestScore2 = localStorage.getItem('highest');
+      this.text.update('Game Over!\nYour Score: '+this.score+'\nHighest Score:'+highestScore2);
       return;
+      }
     }
 
     // If the player is not dead, then we put a setTimeout to run the gameLoop in 20 milliseconds
@@ -68,6 +102,22 @@ class Engine {
   // This method is not implemented correctly, which is why
   // the burger never dies. In your exercises you will fix this method.
   isPlayerDead = () => {
-    return false;
+    const playerY = GAME_HEIGHT - PLAYER_HEIGHT - 10;
+    let overlaps = 0;
+    for (let i = 0; i < this.enemies.length; i++) {
+      if ((Math.abs(this.player.x - this.enemies[i].x) < (PLAYER_WIDTH + ENEMY_WIDTH) / 2) && (Math.abs(playerY - this.enemies[i].y) < (PLAYER_HEIGHT + ENEMY_HEIGHT) / 2)) {
+        if(this.enemies[i].collided==false){
+        overlaps++;
+        this.enemies[i].collided=true;
+        }
+      }
+    }
+
+    if (overlaps > 0) {
+      return true;
+    } else {
+      return false;
+    }
   };
+
 }
